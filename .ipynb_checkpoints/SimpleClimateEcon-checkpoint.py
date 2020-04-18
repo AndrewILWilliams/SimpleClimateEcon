@@ -12,6 +12,10 @@ class CBA:
     def __init__(self, W0=75*10**12, D0=0.00267, pback=200, gamma=2,
                  gsig=-0.0125, TCRE=0.00054, ks=0.12, g=0.02, r=0.035,
                  E0=39, T0=0.9):
+        # Imports
+        import numpy as np
+        import matplotlib.pyplot as plt
+        
         # Model parameters
         self.W0    = W0
         self.T0    = T0
