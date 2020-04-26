@@ -11,7 +11,7 @@ so can -at best- only get stable temps and not declining temps.
 import numpy as np
 import matplotlib.pyplot as plt
 class CBA:
-    def __init__(self, W0=75*10**12, D0=0.00267, pback=200, gamma=2,
+    def __init__(self, W0=75*10**12, D0=0.00267, pback=200, dE = 1, gamma=2,
                  gsig=-0.0125, TCRE=0.00054, ks=0.12, g=0.02, r=0.035,
                  E0=39, T0=0.9):
         # Model parameters
@@ -21,6 +21,7 @@ class CBA:
         self.sig0  = E0/W0
         self.D0    = D0
         self.pback = pback
+        self.dE    = dE
         self.gamma = gamma
         self.gsig  = gsig
         self.TCRE  = TCRE
@@ -93,7 +94,7 @@ class CBA:
     def forward_integration(self, nyears):
         
         self.initialize(nyears)
-        
+
         """Run main loop"""
         for idx, year in enumerate(self.years):
             self.dTdt[idx]    = self.calc_dTdt(self.emiss[idx])
@@ -101,7 +102,14 @@ class CBA:
             self.SCC[idx]     = self.calc_SCC(year, self.temps[idx], self.dTdt[idx])
             self.abate[idx]   = self.calc_abatement_rate(self.SCC[idx])
             self.emiss[idx+1] = self.calc_emissions(year, self.abate[idx], self.SCC[idx])
-
+            
+            if self.SCC[idx] >= self.pback and self.emiss[idx+1] > -self.dE:
+                """Deploy -ve emissions tech
+                at each timestep, remove dE emissions
+                up to a maximum of self.emiss = -dE
+                """
+                self.emiss[idx+1] -= self.dE
+                
             #if self.emiss[idx+1]==0:
             #    self.temps[idx+1:]=np.nan
             #    self.dTdt[idx+1:]=np.nan
@@ -116,8 +124,8 @@ class CBA:
                       'Abatement rate': self.abate,
                       'Social Cost of Carbon': self.SCC}
     
-    def plot(self, ax=None, fsize=(15,7), dpi_=300):
-        
+    def plot(self, fig=None, axs=None, fsize=(15,7), dpi=300, **kwargs):
+
         label_dict = {'Temperature anomaly': r'$\Delta$ T [K]',
                       'dTdt': r'dTdt [K yr$^{-1}$]',
                       'Emissions': r'Emissions [GtCO$_{2}$ yr$^{-1}$]',
@@ -125,24 +133,25 @@ class CBA:
                       'Social Cost of Carbon': r'SCC [\$ /tCO$_{2}$]'}
         
         ylim_dict  = {'Temperature anomaly': (-0.1, 5),
-                      'dTdt': (-0.001, 0.03),
-                      'Emissions': (-5, 60),
+                      'dTdt': (-0.001, 0.05),
+                      'Emissions': (-(self.dE*2), 80),
                       'Abatement rate': (-0.1, 1.1),
                       'Social Cost of Carbon': (0, 500)}
 
-        if ax is None:
-            fig, axs = plt.subplots(nrows=2, ncols=3, dpi=dpi_, figsize=fsize)
+        if axs is None and fig is None:
+            fig, axs = plt.subplots(nrows=2, ncols=3, dpi=dpi, figsize=fsize)
                 
         for idx, ax in enumerate(axs.flatten()):
             if idx == 5:
                 ax.set_visible(False)
                 continue
             else:
-                ax.plot(self.years, list(self.outps.items())[idx][1][:-1])
+                ax.plot(self.years, list(self.outps.items())[idx][1][:-1], **kwargs)
                 ax.set_title(list(self.outps.items())[idx][0], fontsize=15)
                 ax.set_ylim(list(ylim_dict.values())[idx])
                 ax.set_ylabel(list(label_dict.values())[idx], fontsize=12)
                 ax.tick_params(axis='both', which='major', labelsize=10)
-                
+                if 'label' in kwargs.keys():
+                    ax.legend(loc='best')
         fig.tight_layout()
-        return axs # For external manipulation, if needed -- otherwise remove 
+        #return axs # For external manipulation, if needed -- otherwise remove 
