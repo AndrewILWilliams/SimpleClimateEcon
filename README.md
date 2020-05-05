@@ -31,7 +31,7 @@ from SimpleClimateEcon import CBA
 model = CBA()
 
 # Integrate forward in time
-model.forward_integration(nyears=100)
+model.forward_integration(nyears=150)
 
 # Plot it
 fig, ax = plt.subplots()
