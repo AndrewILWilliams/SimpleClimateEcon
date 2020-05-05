@@ -6,7 +6,7 @@ Useful for pedagogical purposes and for exploring sensitivity of peak warming to
 ## Background:
 Most simple integrated assessment models (IAMs) exogenously prescribe an emissions pathway, which in theory can then be modified *in situ* by policy parameters through the abatement rate, this limits the possibility of dynamical feedbacks between emissions, temperature and economic growth. 
 
-On the other hand, full complexity IAMs such as DICE often obfuscate the basic ideas at play by treating the abatement rate, \mu_{t}, as a free parameter which is optimised in time so as to maximise the utility function. This has a more robust theoretical foundation, however the optimisation procedure used in IAMs is often poorly documented and, as I show here, you can get interesting behaviour without taking this approach.
+On the other hand, full complexity IAMs such as DICE often obfuscate the basic ideas at play by treating the abatement rate, <img src="https://render.githubusercontent.com/render/math?math=\mu_{t}">, as a free parameter which is optimised in time so as to maximise the utility function. This has a more robust theoretical foundation, however the optimisation procedure used in IAMs is often poorly documented and, as I show here, you can get interesting behaviour without taking this approach.
 
 In `SimpleClimateEcon`, I've tried to make everything as simple as possible: 
 
