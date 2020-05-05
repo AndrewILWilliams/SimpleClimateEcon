@@ -18,7 +18,7 @@ model.forward_integration(nyears=100)
 fig, ax = plt.subplots()
 model.plot(fig=fig, axs=ax)
 ```
-![Impact of varying the discount rate in the model](Example_figure.pdf)
+![Figure](Example_figure.png)
 
 ## Can also do more interesting runs to test sensitivity to parameters such as discount rate
 ![Impact of varying the discount rate in the model](varying_discount_rate.png)
