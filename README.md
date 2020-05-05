@@ -12,7 +12,7 @@ In `SimpleClimateEcon`, I've tried to make everything as simple as possible:
 
 Temperatures are set by emissions using the TCRE-relationship, and temperatures then go on to cause economic damages which raises the Social Cost of Carbon (SCC) - you can think of this as the carbon tax. 
 
-The value of the SCC then sets the abatement rate (in theory, through a relationship obtained by parameterizing the output of more complicated IAMs, but for now it's just a linear function of SCC). Finally the abatement rate and the current size of the world economy set emissions for the next timestep through <img src="https://render.githubusercontent.com/render/math?math=E_{t+1} \, \sim \, GDP_{t} \, \mu_{t}">, and the circle of life continues. 
+The value of the SCC then sets the abatement rate (in theory, through a relationship obtained by parameterizing the output of more complicated IAMs, but for now it's just a linear function of SCC). Finally the abatement rate and the current size of the world economy set emissions for the next timestep through $$E_{t+1} \, \sim \, \mu_{t} \, GDP_{t}$$, and the circle of life continues. 
 
 ## Example:
 
